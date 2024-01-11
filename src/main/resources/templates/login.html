@@ -46,6 +46,16 @@
         #response-display {
             margin-top: 20px;
         }
+
+        a {
+            text-decoration: none;
+            color: #5bc0de;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -59,8 +69,9 @@
     <input type="password" id="password" name="password" required>
 
     <button type="button" onclick="authenticate()">Authenticate</button>
+    <p></p>
+    <a href="home" th:href="@{/home}">Back to Home Page</a>
 </form>
-
 <div id="response-display"></div>
 
 <script>
@@ -68,17 +79,22 @@
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
+        if(username === ""){
+            alert("Username must be filled out");
+            return false;
+        } else if(password === ""){
+            alert("Password must be filled out");
+            return false;
+        }
+
         // Make an AJAX request to the server (controller)
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    // Display the response on the page
-                    document.getElementById("response-display").innerText = `Response: ${xhr.responseText}`;
-                } else {
-                    // Handle error
-                    console.error('Error:', xhr.status);
-                }
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Display the response on the page
+                document.getElementById("response-display").innerText = `Response: ${xhr.responseText}`;
+            } else {
+                document.getElementById("response-display").innerText = "INVALID_CREDENTIALS";
             }
         };
 

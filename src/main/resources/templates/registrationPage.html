@@ -61,6 +61,20 @@
         .button-center {
             text-align: center;
         }
+
+        .response-message {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #5bc0de;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -69,7 +83,7 @@
 </div>
 
 <div class="form-container">
-    <form action="/register" method="post">
+    <form id="registrationForm" method="post">
         <table>
             <tr>
                 <td><label for="username">Username</label></td>
@@ -80,12 +94,57 @@
                 <td><input type="password" id="password" name="password" /></td>
             </tr>
             <tr>
+                <td><label for="role">Role</label></td>
+                <td><input type="text" id="role" name="role" /></td>
+            </tr>
+            <tr>
                 <td colspan="2" class="button-center">
-                    <button type="submit">Register</button>
+                    <button type="button" onclick="registerUser()">Register</button>
                 </td>
             </tr>
         </table>
+        <p></p>
+        <a href="home" th:href="@{/home}">Back to Home Page</a>
     </form>
 </div>
+
+<!-- Display response message -->
+<div id="responseMessage" class="response-message"></div>
+
+<script>
+    function registerUser() {
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const role = document.getElementById("role").value;
+
+        if(username === ""){
+            alert("Username must be filled out");
+            return false;
+        } else if(password === ""){
+            alert("Password must be filled out");
+            return false;
+        } else if (role === ""){
+            alert("Role must be filled out");
+            return false;
+        }
+
+        var form = document.getElementById('registrationForm');
+        var formData = new FormData(form);
+
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('responseMessage').innerHTML = '<p>' + data + '</p>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
 </body>
 </html>
