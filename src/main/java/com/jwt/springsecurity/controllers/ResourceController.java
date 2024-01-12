@@ -9,12 +9,12 @@ public class ResourceController {
 
     @GetMapping("/hellouser")
     public String getUser(){
-        return "Hello User!";
+        return "userPage";
     }
 
     @GetMapping("/helloadmin")
     public String getAdmin(){
-        return "Hello Admin!";
+        return "adminPage";
     }
     @GetMapping("/home")
     public String getHome(Model model){

@@ -35,15 +35,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    public SpringSecurityConfiguration(CustomUserDetailsService customUserDetailsService, CustomJwtAuthenticationFilter customJwtAuthenticationFilter, JwtAuthenticationEntryPoint unauthorizedHandler) {
-//        this.userDetailsService = customUserDetailsService;
-//        this.customJwtAuthenticationFilter = customJwtAuthenticationFilter;
-//        this.unauthorizedHandler = unauthorizedHandler;
-//    }
-
-
-
-
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -52,8 +43,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/helloadmin").hasRole("ADMIN")
-                .antMatchers("/hellouser").hasAnyRole("USER","ADMIN")
+                .authorizeRequests()
+                .antMatchers("/helloadmin").hasRole("ADMIN")
+//                .antMatchers("/hellouser").hasAnyRole("USER","ADMIN")
+//                .antMatchers("/dashboard").hasAnyRole("USER","ADMIN")
                 .antMatchers("/authenticate","/register","/home","/registrationPage","/login").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
