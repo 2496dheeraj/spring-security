@@ -76,35 +76,54 @@
 
 <script>
     function authenticate() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+        // Assuming you have API endpoints for authentication and fetching user data
+        var authenticationEndpoint = '/authenticate';
+        var dashboardEndpoint = '/dashboard';
 
-        if(username === ""){
-            alert("Username must be filled out");
-            return false;
-        } else if(password === ""){
-            alert("Password must be filled out");
-            return false;
-        }
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
 
-        // Make an AJAX request to the server (controller)
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Display the response on the page
-                document.getElementById("response-display").innerText = `Response: ${xhr.responseText}`;
-            } else {
-                document.getElementById("response-display").innerText = "INVALID_CREDENTIALS";
-            }
-        };
-
-        // Replace 'YOUR_CONTROLLER_ENDPOINT' with the actual endpoint of your controller
-        xhr.open('POST', '/authenticate', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        // Send the data (username and password) to the server
-        const data = JSON.stringify({ username: username, password: password });
-        xhr.send(data);
+        // Your authentication logic (for example, using fetch or AJAX)
+        fetch(authenticationEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // If authentication is successful, make a GET request to /dashboard
+                    fetch(dashboardEndpoint, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + data.token
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // If user is valid, redirect to /dashboard
+                                window.location.href = dashboardEndpoint;
+                            } else {
+                                // Display an error message if user is not valid
+                                document.getElementById('response-display').innerHTML = '<p>User is not valid</p>';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    // Display an error message if authentication fails
+                    document.getElementById('response-display').innerHTML = '<p>Authentication failed</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 </script>
 </body>
