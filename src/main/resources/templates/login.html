@@ -68,7 +68,7 @@
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
 
-    <button type="button" onclick="authenticate()">Authenticate</button>
+    <button type="button" onclick="authenticate()">Login</button>
     <p></p>
     <a href="home" th:href="@{/home}">Back to Home Page</a>
 </form>
@@ -107,7 +107,7 @@
                         .then(response => {
                             if (response.ok) {
                                 // If user is valid, redirect to /dashboard
-                                window.location.href = dashboardEndpoint;
+                                window.location.href = "/adminPage";
                             } else {
                                 // Display an error message if user is not valid
                                 document.getElementById('response-display').innerHTML = '<p>User is not valid</p>';
