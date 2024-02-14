@@ -106,16 +106,35 @@
                     })
                         .then(response => {
                             if (response.ok) {
-                                // If user is valid, redirect to /dashboard
-                                window.location.href = "/adminPage";
+                                // Successful response, redirect based on role
+                                return response.json();
                             } else {
-                                // Display an error message if user is not valid
-                                document.getElementById('response-display').innerHTML = '<p>User is not valid</p>';
+                                // Handle error
+                                throw new Error('Failed to fetch dashboard data');
+                            }
+                        })
+                        .then(data => {
+                            if (data.role === 'ROLE_ADMIN') {
+                                window.location.href = '/adminPage';
+                            } else {
+                                window.location.href = '/userPage';
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
                         });
+                        // .then(response => {
+                        //     if (response.ok) {
+                        //         // If user is valid, redirect to /dashboard
+                        //         window.location.href = "/adminPage";
+                        //     } else {
+                        //         // Display an error message if user is not valid
+                        //         document.getElementById('response-display').innerHTML = '<p>User is not valid</p>';
+                        //     }
+                        // })
+                        // .catch(error => {
+                        //     console.error('Error:', error);
+                        // });
                 } else {
                     // Display an error message if authentication fails
                     document.getElementById('response-display').innerHTML = '<p>Authentication failed</p>';
